@@ -43,3 +43,28 @@ void PortWrite(int portnum, unsigned int portval) {
         }
     }
 }
+
+int pinRead(int pinnum) {
+    unsigned int myval;
+
+    if (pinnum >= 0 && pinnum <= 31) {
+        IODIR0 &= ~(1 << pinnum);        // Set as input
+        myval = IOPIN0;                  // Read from PORT0
+        if ((myval & (1 << pinnum)) == 0)
+            return 0;
+        else
+            return 1;
+    }
+
+    else if (pinnum >= 100 && pinnum <= 131) {
+        int pin = pinnum - 100;
+        IODIR1 &= ~(1 << pin);           // Set as input
+        myval = IOPIN1;                  // Read from PORT1
+        if ((myval & (1 << pin)) == 0)
+            return 0;
+        else
+            return 1;
+    }
+
+}
+
