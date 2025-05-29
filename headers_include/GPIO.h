@@ -68,3 +68,67 @@ int pinRead(int pinnum) {
 
 }
 
+
+unsigned int portRead(int portnum) {
+    unsigned int mydata;
+
+    if (portnum == 0) {
+        // P0.0–P0.7
+        IODIR0 &= ~(0x000000FF);  // Set bits 0–7 as input
+        mydata = IOPIN0;
+        return (mydata & 0x000000FF);
+    }
+
+    else if (portnum == 1) {
+        // P0.8–P0.15
+        IODIR0 &= ~(0x0000FF00);
+        mydata = IOPIN0;
+        return ((mydata & 0x0000FF00) >> 8);
+    }
+
+    else if (portnum == 2) {
+        // P0.16–P0.23
+        IODIR0 &= ~(0x00FF0000);
+        mydata = IOPIN0;
+        return ((mydata & 0x00FF0000) >> 16);
+    }
+
+    else if (portnum == 3) {
+        // P0.24–P0.31
+        IODIR0 &= ~(0xFF000000);
+        mydata = IOPIN0;
+        return ((mydata & 0xFF000000) >> 24);
+    }
+
+    else if (portnum == 9) {
+        // Full P0
+        IODIR0 = 0x00000000;
+        mydata = IOPIN0;
+        return mydata;
+    }
+
+    else if (portnum == 12) {
+        // P1.16–P1.23
+        IODIR1 &= ~(0x00FF0000);
+        mydata = IOPIN1;
+        return ((mydata & 0x00FF0000) >> 16);
+    }
+
+    else if (portnum == 13) {
+        // P1.24–P1.31
+        IODIR1 &= ~(0xFF000000);
+        mydata = IOPIN1;
+        return ((mydata & 0xFF000000) >> 24);
+    }
+
+    else if (portnum == 19) {
+        // Full P1
+        IODIR1 = 0x00000000;
+        mydata = IOPIN1;
+        return mydata;
+    }
+
+
+}
+
+
