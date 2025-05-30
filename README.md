@@ -7,9 +7,13 @@ Welcome to the **LPC214x GPIO Helper Functions** — a lightweight, efficient, a
 ## Features
 
 ✅ Easy-to-use `pinWrite`, `pinRead`, `portWrite`, and `portRead` functions
+
 ✅ Pure Embedded C, compatible with older compilers
+
 ✅ Direct manipulation of IODIR, IOSET, IOCLR, and IOPIN registers
+
 ✅ Uses simple indexing: 0–31 for Port 0 and 100+offset for Port 1
+
 ✅ No use of C99 features like `bool`, ensuring backward compatibility
 
 ---
