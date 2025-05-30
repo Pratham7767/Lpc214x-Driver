@@ -1,10 +1,10 @@
-# 🌟 LPC214x GPIO Utility Library
+# LPC214x GPIO Utility Library
 
 Welcome to the **LPC214x GPIO Helper Functions** — a lightweight, efficient, and clean abstraction to control GPIO pins and ports on the **LPC214x** (ARM7TDMI) microcontroller series using Embedded C.
 
 ---
 
-## 🚀 Features
+## Features
 
 ✅ Easy-to-use `pinWrite`, `pinRead`, `portWrite`, and `portRead` functions
 ✅ Pure Embedded C, compatible with older compilers
@@ -14,7 +14,7 @@ Welcome to the **LPC214x GPIO Helper Functions** — a lightweight, efficient, a
 
 ---
 
-## 📦 Pin Mapping Convention
+## Pin Mapping Convention
 
 | PORT   | Pin Range    | Usage Convention |
 | ------ | ------------ | ---------------- |
