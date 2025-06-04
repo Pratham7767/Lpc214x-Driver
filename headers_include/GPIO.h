@@ -132,3 +132,77 @@ unsigned int portRead(int portnum) {
 }
 
 
+void pinSelect(unsigned int pinnum, unsigned int splFunction ){
+    unsigned int bit1 ,bit0;
+   
+    if (splFunction==0){
+    bit0= 0; bit1=0;
+   }
+   if (splFunction==1){
+    bit0= 0; bit1=1;
+   }
+   if (splFunction==2){
+    bit0= 1; bit1=0;
+   }
+   if (splFunction==3){
+    bit0= 1; bit1=1;
+   }
+if (pinnum>=0 && pinnum<=15){
+    //0.0 to 0.15 of port 0
+    if(bit0 == 1){
+        PINSEL0=PINSEL0|(0x01<<(pinnum*2));
+    }
+    else {
+        PINSEL0=PINSEL0 & (~(0x01<<(pinnum*2)));
+    }
+    
+    if(bit1 == 1){
+        PINSEL0=PINSEL0|(0x01<<((pinnum*2)+1));
+    }
+    else {
+        PINSEL0=PINSEL0 & (~(0x01<<((pinnum*2)+1)));
+    }
+
+}
+
+if (pinnum>=16 && pinnum<=31){
+    //0.16 to 0.31 of port 0
+    if(bit0 == 1){
+        PINSEL1=PINSEL1|(0x01<<(pinnum*2));
+    }
+    else {
+        PINSEL1=PINSEL1 & (~(0x01<<(pinnum*2)));
+    }
+    
+    if(bit1 == 1){
+        PINSEL1=PINSEL1|(0x01<<((pinnum*2)+1));
+    }
+    else {
+        PINSEL1=PINSEL1 & (~(0x01<<((pinnum*2)+1)));
+    }
+
+}
+
+if (pinnum>=116 && pinnum<=131){
+    //1.16 to 1.31 of port 0
+    pinnum=pinnum-100;
+    if(bit0 == 1){
+        PINSEL2=PINSEL2|(0x01<<(pinnum*2));
+    }
+    else {
+        PINSEL2=PINSEL2 & (~(0x01<<(pinnum*2)));
+    }
+    
+    if(bit1 == 1){
+        PINSEL2=PINSEL2|(0x01<<((pinnum*2)+1));
+    }
+    else {
+        PINSEL2=PINSEL2 & (~(0x01<<((pinnum*2)+1)));
+    }
+
+}
+
+
+
+
+}
