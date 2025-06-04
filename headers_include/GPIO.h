@@ -132,77 +132,81 @@ unsigned int portRead(int portnum) {
 }
 
 
-void pinSelect(unsigned int pinnum, unsigned int splFunction ){
-    unsigned int bit1 ,bit0;
-   
-    if (splFunction==0){
-    bit0= 0; bit1=0;
-   }
-   if (splFunction==1){
-    bit0= 0; bit1=1;
-   }
-   if (splFunction==2){
-    bit0= 1; bit1=0;
-   }
-   if (splFunction==3){
-    bit0= 1; bit1=1;
-   }
-if (pinnum>=0 && pinnum<=15){
-    //0.0 to 0.15 of port 0
-    if(bit0 == 1){
-        PINSEL0=PINSEL0|(0x01<<(pinnum*2));
+void pinSelect(int pinnum, int splFunction) {
+    int bit0 = 0, bit1 = 0;
+
+    // Set bit0 and bit1 based on splFunction (0 to 3)
+    if (splFunction == 0) {
+        bit0 = 0; bit1 = 0;
+    }
+    else if (splFunction == 1) {
+        bit0 = 1; bit1 = 0;
+    }
+    else if (splFunction == 2) {
+        bit0 = 0; bit1 = 1;
+    }
+    else if (splFunction == 3) {
+        bit0 = 1; bit1 = 1;
     }
     else {
-        PINSEL0=PINSEL0 & (~(0x01<<(pinnum*2)));
-    }
-    
-    if(bit1 == 1){
-        PINSEL0=PINSEL0|(0x01<<((pinnum*2)+1));
-    }
-    else {
-        PINSEL0=PINSEL0 & (~(0x01<<((pinnum*2)+1)));
+        return; // invalid splFunction, exit
     }
 
+    // Port 0.0 to 0.15 → PINSEL0
+    if (pinnum >= 0 && pinnum <= 15) {
+        int offset = pinnum * 2;
+
+        // Clear both bits first
+        PINSEL0 &= ~(1 << offset);
+        PINSEL0 &= ~(1 << (offset + 1));
+
+        // Set bits
+        if (bit0 == 1) {
+            PINSEL0 |= (1 << offset);
+        }
+        if (bit1 == 1) {
+            PINSEL0 |= (1 << (offset + 1));
+        }
+    }
+
+    // Port 0.16 to 0.31 → PINSEL1
+    else if (pinnum >= 16 && pinnum <= 31) {
+        int offset = (pinnum - 16) * 2;
+
+        // Clear both bits first
+        PINSEL1 &= ~(1 << offset);
+        PINSEL1 &= ~(1 << (offset + 1));
+
+        // Set bits
+        if (bit0 == 1) {
+            PINSEL1 |= (1 << offset);
+        }
+        if (bit1 == 1) {
+            PINSEL1 |= (1 << (offset + 1));
+        }
+    }
+
+    // Port 1.16 to 1.31 → PINSEL2 (represented as 116 to 131)
+    else if (pinnum >= 116 && pinnum <= 131) {
+        int actualPin = pinnum - 100;
+        int offset = (actualPin) * 2;
+
+        // Clear both bits first
+        PINSEL2 &= ~(1 << offset);
+        PINSEL2 &= ~(1 << (offset + 1));
+
+        // Set bits
+        if (bit0 == 1) {
+            PINSEL2 |= (1 << offset);
+        }
+        if (bit1 == 1) {
+            PINSEL2 |= (1 << (offset + 1));
+        }
+    }
+
+    // Other pins not supported
+    else {
+        return;
+    }
 }
 
-if (pinnum>=16 && pinnum<=31){
-    //0.16 to 0.31 of port 0
-    if(bit0 == 1){
-        PINSEL1=PINSEL1|(0x01<<(pinnum*2));
-    }
-    else {
-        PINSEL1=PINSEL1 & (~(0x01<<(pinnum*2)));
-    }
-    
-    if(bit1 == 1){
-        PINSEL1=PINSEL1|(0x01<<((pinnum*2)+1));
-    }
-    else {
-        PINSEL1=PINSEL1 & (~(0x01<<((pinnum*2)+1)));
-    }
-
-}
-
-if (pinnum>=116 && pinnum<=131){
-    //1.16 to 1.31 of port 0
-    pinnum=pinnum-100;
-    if(bit0 == 1){
-        PINSEL2=PINSEL2|(0x01<<(pinnum*2));
-    }
-    else {
-        PINSEL2=PINSEL2 & (~(0x01<<(pinnum*2)));
-    }
-    
-    if(bit1 == 1){
-        PINSEL2=PINSEL2|(0x01<<((pinnum*2)+1));
-    }
-    else {
-        PINSEL2=PINSEL2 & (~(0x01<<((pinnum*2)+1)));
-    }
-
-}
-
-
-
-
-}
