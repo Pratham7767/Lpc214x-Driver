@@ -20,7 +20,7 @@ void pinWrite(int pinnum, int pinval) {
 }
 
 // Write 8 bits to a group of pins
-void PortWrite(int portnum, unsigned int portval) {
+void portWrite(int portnum, unsigned int portval) {
     int i;
     int basePin;
 
