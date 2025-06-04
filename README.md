@@ -8,9 +8,11 @@ Welcome to the **LPC214x GPIO Helper Functions** — a lightweight, efficient, a
 
 ✅ Easy-to-use `pinWrite`, `pinRead`, `portWrite`, and `portRead` functions
 
+✅ **NEW:** `pinSelect` function for configuring pin special functions
+
 ✅ Pure Embedded C, compatible with older compilers
 
-✅ Direct manipulation of IODIR, IOSET, IOCLR, and IOPIN registers
+✅ Direct manipulation of IODIR, IOSET, IOCLR, IOPIN, and PINSEL registers
 
 ✅ Uses simple indexing: 0–31 for Port 0 and 100+offset for Port 1
 
@@ -95,11 +97,36 @@ unsigned int p1_full = portRead(19); // Read all of Port 1
 
 ---
 
+### 5️⃣ `void pinSelect(int pinnum, int splFunction)`
+
+Configures the special function of a pin by setting the appropriate PINSEL register bits. This allows pins to be used for alternate functions like UART, SPI, PWM, etc.
+
+| splFunction | Pin Function    |
+| ----------- | --------------- |
+| 0           | GPIO (default)  |
+| 1           | Special Func 1  |
+| 2           | Special Func 2  |
+| 3           | Special Func 3  |
+
+**Supported Pin Ranges:**
+- P0.0 – P0.15 (pins 0-15) → Uses PINSEL0 register
+- P0.16 – P0.31 (pins 16-31) → Uses PINSEL1 register  
+- P1.16 – P1.31 (pins 116-131) → Uses PINSEL2 register
+
+```c
+pinSelect(0, 1);    // Configure P0.0 for special function 1
+pinSelect(16, 2);   // Configure P0.16 for special function 2
+pinSelect(116, 0);  // Configure P1.16 as GPIO
+```
+
+---
+
 ## ⚠️ Notes
 
 * Bit shifts are exclusively left shift operations to avoid confusion.
 * All function logic is designed to work within Embedded C (pre-C99).
 * `IODIR` registers are used to set pin direction on-the-fly.
+* `pinSelect` function automatically clears existing bits before setting new function.
 
 ---
 
