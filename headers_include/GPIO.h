@@ -210,3 +210,12 @@ void pinSelect(int pinnum, int splFunction) {
     }
 }
 
+void digitalWrite(unsigned int value, unsigned int modesel) {
+    if (value <= 1023) {  // No need to check value >= 0 for unsigned
+        if (modesel == 1) {
+            DACR = (1 << 16) | (value << 6);  // Set BIAS = 1
+        } else {
+            DACR = (0 << 16) | (value << 6);  // BIAS = 0 (optional, since 0 << 16 = 0)
+        }
+    }
+}
