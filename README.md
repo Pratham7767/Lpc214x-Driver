@@ -10,9 +10,11 @@ Welcome to the **LPC214x GPIO Helper Functions** — a lightweight, efficient, a
 
 ✅ **NEW:** `pinSelect` function for configuring pin special functions
 
+✅ **NEW:** `digitalWrite` function for DAC analog output control
+
 ✅ Pure Embedded C, compatible with older compilers
 
-✅ Direct manipulation of IODIR, IOSET, IOCLR, IOPIN, and PINSEL registers
+✅ Direct manipulation of IODIR, IOSET, IOCLR, IOPIN, PINSEL, and DACR registers
 
 ✅ Uses simple indexing: 0–31 for Port 0 and 100+offset for Port 1
 
@@ -121,12 +123,50 @@ pinSelect(116, 0);  // Configure P1.16 as GPIO
 
 ---
 
-## ⚠️ Notes
+### 6️⃣ `void digitalWrite(unsigned int value, unsigned int modesel)`
+
+Controls the **Digital-to-Analog Converter (DAC)** output on pin **P0.25**. The LPC2144 has only **one DAC channel** available at P0.25, which converts digital values to analog voltage output.
+
+**Parameters:**
+- `value`: 10-bit digital value (0–1023) to be converted to analog output
+- `modesel`: Bias mode selection
+  - `0` = Normal mode (BIAS = 0)
+  - `1` = High-speed mode (BIAS = 1, faster settling time)
+
+**DAC Output Voltage Formula:**
+```
+VOUT = (value / 1023) × VREF
+```
+Where VREF is typically 3.3V on LPC2144.
+
+```c
+digitalWrite(512, 0);   // Output ~1.65V in normal mode (50% of 3.3V)
+digitalWrite(1023, 1);  // Output ~3.3V in high-speed mode (100% of 3.3V)
+digitalWrite(0, 0);     // Output 0V in normal mode
+digitalWrite(256, 1);   // Output ~0.825V in high-speed mode (25% of 3.3V)
+```
+
+**Key Features:**
+- ✅ 10-bit resolution (1024 discrete levels: 0–1023)
+- ✅ Only available on **P0.25** (single DAC channel)
+- ✅ Automatic range validation (values > 1023 are ignored)
+- ✅ Configurable bias mode for speed vs. power optimization
+
+**⚠️ Important Notes:**
+- The LPC2144 has **only ONE DAC** located at pin **P0.25**
+- Pin P0.25 must be configured for DAC function using `pinSelect(25, 2)` before use
+- Values exceeding 1023 will be ignored (function does nothing)
+- High-speed mode (BIAS=1) offers faster settling but higher power consumption
+
+---
+
+## ⚠️ General Notes
 
 * Bit shifts are exclusively left shift operations to avoid confusion.
 * All function logic is designed to work within Embedded C (pre-C99).
 * `IODIR` registers are used to set pin direction on-the-fly.
 * `pinSelect` function automatically clears existing bits before setting new function.
+* DAC functionality is only available on LPC2144 and similar variants with built-in DAC.
 
 ---
 
@@ -141,4 +181,31 @@ pinSelect(116, 0);  // Configure P1.16 as GPIO
 
 ---
 
-##
+## 🚀 Quick Start Example
+
+```c
+#include "gpio_utils.h"
+
+int main() {
+    // Configure P0.25 for DAC function
+    pinSelect(25, 2);
+    
+    // Set P0.0 as output and turn on LED
+    pinWrite(0, 1);
+    
+    // Read switch connected to P0.1
+    int switch_state = pinRead(1);
+    
+    // Write pattern to Port 0 lower byte
+    portWrite(0, 0xAA);
+    
+    // Generate 1.65V analog output
+    digitalWrite(512, 0);
+    
+    return 0;
+}
+```
+
+---
+
+**Happy Coding with LPC214x! 🎯**
