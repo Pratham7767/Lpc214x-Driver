@@ -173,10 +173,10 @@ digitalWrite(256, 1);   // Output ~0.825V in high-speed mode (25% of 3.3V)
 ## 📁 File Structure
 
 ```plaintext
-├── gpio_utils.c    // Implementation of all helper functions
-├── gpio_utils.h    // Header file with function prototypes
-├── main.c          // Example usage
-├── README.md       // This file
+├── headers_include/
+│   ├── GPIO.h       // GPIO utility functions header
+│   └── lpc214x.h    // LPC214x register definitions and macros
+└── README.md        // This documentation file
 ```
 
 ---
@@ -184,7 +184,8 @@ digitalWrite(256, 1);   // Output ~0.825V in high-speed mode (25% of 3.3V)
 ## 🚀 Quick Start Example
 
 ```c
-#include "gpio_utils.h"
+#include "headers_include/GPIO.h"
+#include "headers_include/lpc214x.h"
 
 int main() {
     // Configure P0.25 for DAC function
